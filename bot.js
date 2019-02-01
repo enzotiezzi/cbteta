@@ -8,6 +8,7 @@ logger.add(logger.transports.Console, {
 });
 
 var bot = new Discord.Client();
+console.log("entrou");
 
 bot.on('ready', function (evt) {
     logger.info('Connected');
