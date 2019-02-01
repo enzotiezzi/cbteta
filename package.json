@@ -1,0 +1,14 @@
+{
+  "name": "cbteta",
+  "version": "1.0.0",
+  "description": "bot para time de pokemon",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "author": "enzo tiezzi",
+  "dependencies": {
+    "discord.js": "^11.3.0",
+    "winston": "^2.4.0"
+  }
+}
