@@ -43,4 +43,4 @@ function handleTreino(cmd, message) {
     }
 }
 
-bot.login(auth.token);
+bot.login(process.env.TOKEN);
