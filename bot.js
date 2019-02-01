@@ -34,7 +34,6 @@ function handleTreino(cmd, message) {
     switch (cmd) {
         case 'treino':
             message.channel.members.forEach(member => {
-
                 if (member != null && member != undefined) {
                     member.createDM()
                         .then(x => x.send('Bora treinar'));
