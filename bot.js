@@ -108,7 +108,7 @@ function messageAllPlayers(members, message) {
 function createTournament(message, name) {
     torneios.push({
         name: name.trim(),
-        players: ["eu", "tu", "ele", "nos", "vos", "eles", "eita"],
+        players: [],
         description: "",
         isRunning: true,
         closed: false,
