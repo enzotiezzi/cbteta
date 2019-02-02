@@ -80,6 +80,14 @@ function handleTreino(cmd, message, param, userName) {
         case 'chamar-torneio':
             callPlayers(message, param);
             break;
+
+        case 'começar-torneio':
+            startTournament(message, param);
+            break;
+
+        case 'bracket':
+            showBracket(message, param);
+            break;
     }
 }
 
@@ -100,9 +108,11 @@ function messageAllPlayers(members, message) {
 function createTournament(message, name) {
     torneios.push({
         name: name.trim(),
-        players: [],
+        players: ["eu", "tu", "ele", "nos", "vos", "eles", "eita"],
         description: "",
-        isRunning: true
+        isRunning: true,
+        closed: false,
+        matches: []
     });
     message.reply("Torneio '" + name + "' criado com sucesso");
 }
@@ -111,13 +121,16 @@ function joinTournament(message, tournamentName, userName) {
     var tournament = torneios.find(x => x.name == tournamentName && x.isRunning);
 
     if (tournament != undefined && tournament != null) {
-        // torneio existe, adiciona player no torneio
-        if (tournament.players.indexOf(userName == -1)) {
-            tournament.players.push(userName);
-            message.reply("Você foi incluído no torneio: " + tournamentName);
+        if (!tournament.closed) {
+            if (tournament.players.indexOf(userName == -1)) {
+                tournament.players.push(userName);
+                message.reply("Você foi incluído no torneio: " + tournamentName);
+            }
+            else
+                message.reply("Você já está no torneio");
         }
         else
-            message.reply("Você já está no torneio");
+            message.reply("As inscrições pro torneio já foram encerradas.");
     }
     else
         message.reply("Não foi possível localizar o torneio, o enzo deve ter feito cagado, desculpe");
@@ -197,6 +210,60 @@ function callPlayers(message, tournamentName) {
     }
     else
         message.reply("Não foi possível localizar o torneio, o enzo deve ter feito cagado, desculpe");
+}
+
+function startTournament(message, tournamentName) {
+    var tournament = torneios.find(x => x.name == tournamentName && x.isRunning);
+
+    if (tournament != undefined && tournament != null) {
+        tournament.closed = true;
+
+        var randomized = shuffle(tournament.players);
+
+        for (let index = 0; index < randomized.length; index += 2) {
+            const player = randomized[index];
+            const nextPlayer = randomized[index + 1];
+
+            if (nextPlayer != undefined && nextPlayer != null) {
+                tournament.matches.push(player + " vs " + nextPlayer);
+            }
+            else
+                tournament.matches.push(player + " BYE");
+        }
+
+        tournament.matches.forEach(match => {
+            message.reply(match);
+        });
+    }
+    else
+        message.reply("Não foi possível localizar o torneio, o enzo deve ter feito cagado, desculpe");
+}
+
+function showBracket(message, tournamentName) {
+    var tournament = torneios.find(x => x.name == tournamentName && x.isRunning);
+
+    if (tournament != undefined && tournament != null) {
+        tournament.matches.forEach(match => {
+            message.reply(match);
+        });
+    }
+    else
+        message.reply("Não foi possível localizar o torneio, o enzo deve ter feito cagado, desculpe");
+}
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }
 
 bot.login(process.env.TOKEN || auth.token);
