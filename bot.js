@@ -1,6 +1,6 @@
 var Discord = require('discord.js');
 var logger = require('winston');
-var auth = require('./auth.json');
+//var auth = require('./auth.json');
 
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {
